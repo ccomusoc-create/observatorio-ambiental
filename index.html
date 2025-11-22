@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Observatorio Ambiental CCOMUSOC</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: white; color: black; padding: 20px; }
+        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+        th, td { border: 1px solid black; padding: 8px; text-align: left; }
+        th { background-color: #eee; }
+        img { max-width: 100%; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Observatorio Ambiental - Argentina</h1>
+    <h2>Noticias recientes: Incendios, Deforestación, Derrames</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Tema</th>
+                <th>Título</th>
+                <th>Link</th>
+            </tr>
+        </thead>
+        <tbody id="noticias"></tbody>
+    </table>
+
+    <img src="charts/grafico.png" alt="Gráfico de noticias">
+
+    <script>
+        fetch('data/ambiental.csv')
+            .then(response => response.text())
+            .then(csvText => {
+                const filas = csvText.trim().split('\n').slice(1);
+                const tbody = document.getElementById('noticias');
+                filas.slice(-20).reverse().forEach(fila => {
+                    const [fecha, tema, titulo, link] = fila.split(',');
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<td>${fecha}</td><td>${tema}</td><td>${titulo}</td><td><a href="${link}" target="_blank">Ver</a></td>`;
+                    tbody.appendChild(tr);
+                });
+            });
+    </script>
+</body>
+</html>
